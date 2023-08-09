@@ -40,11 +40,11 @@ class Home extends React.Component {
         return (
             <div className="album py-5 bg-body-tertiary" style={{ width: 'calc(100vw - 200px)'}}>
             <div className="container">
-              <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+              <div className="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-3">
               {items.map((item) => (
                     <div className="col" key={item.id}>
                     <div className="card shadow-sm">
-                      <img src={`./../../..${item.img}`}></img>
+                      <img className="bd-placeholder-img card-img-top" width="100%" height="240" src={`http://127.0.0.1:8000${item.img}`} alt={item.name}></img>
                       <div className="card-body">
                         <Link to={`/product/${item.id}`} style={{ textDecoration: 'none'}}><p className="card-text">{item.name}</p></Link>
                         <div className="d-flex justify-content-between align-items-center">
