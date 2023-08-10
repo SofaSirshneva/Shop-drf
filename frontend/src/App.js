@@ -8,10 +8,8 @@ import Product from './appProduct/Product';
 import Category from './appCategory/Category';
 import Cart from './appCart/Cart';
 import CartAdd from './appCart/CartAdd';
-import reducers from './reducers';
 
 function App() {
-    const store = createStoreWithMiddleware(reducers);
     return (
         <Router>
         <div>

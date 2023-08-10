@@ -5,6 +5,20 @@ function withParams(Component) {
     return props => <Component {...props} params={useParams()} />;
 }
 
+function getCookie(name) {
+    if (!document.cookie) {
+      return null;
+    }
+    const token = document.cookie.split(';')
+      .map(c => c.trim())
+      .filter(c => c.startsWith(name + '='));
+
+    if (token.length === 0) {
+      return null;
+    }
+    return decodeURIComponent(token[0].split('=')[1]);
+  }
+
 class CartAdd extends React.Component {
     
       componentDidMount() {
@@ -13,6 +27,7 @@ class CartAdd extends React.Component {
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken')
         },
         body: JSON.stringify({
             id: this.props.params.id

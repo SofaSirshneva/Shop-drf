@@ -28,7 +28,10 @@ class OneCategory(APIView):
 class CartAPI(APIView):
     def get(self, request):
         cart = Cart(request)
-        return Response(cart.cart)
+        queryset = []
+        for product, quantity in cart.cart.items():
+            queryset.append(ProductSerializer(Product.objects.get(id=int(product))).data | quantity)
+        return Response(queryset)
     
 class CartAdd(APIView):
     def post(self, request):

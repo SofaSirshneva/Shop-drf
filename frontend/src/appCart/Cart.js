@@ -43,18 +43,25 @@ class Cart extends React.Component {
               <h1 className='text-center'>Корзина</h1>
             <div className="container">
               <div className="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-3">
-              {Object.keys(items).map((item) => (
+              {items.map((item) => (
                     <div className="col" key={item.id}>
                     <div className="card shadow-sm">
                       <img className="bd-placeholder-img card-img-top" width="100%" height="240" src={`http://127.0.0.1:8000${item.img}`} alt={item.name}></img>
                       <div className="card-body">
                         <Link to={`/product/${item.id}`} style={{ textDecoration: 'none'}}><p className="card-text">{item.name}</p></Link>
                         <div className="d-flex justify-content-between align-items-center">
-                          <div className="btn-group">
-                            <button type="button" className="btn btn-sm btn-outline-secondary">В корзину</button>
-                            <button type="button" className="btn btn-sm btn-outline-secondary">تعديل</button>
-                          </div>
-                          <small className="text-body-secondary">{item.price} руб.</small>
+                        <div class="d-flex gap-2 justify-content-center pt-3 pb-4">
+                            <Link to={`/cart_add/${item.id}`}>
+                            <button className="btn  btn-outline-primary rounded-circle p-2 lh-1" type="button">
+                                <img src='http://127.0.0.1:8000/media/imp/plus.png' alt='plus' className="bi" width="18" height="16"></img>
+                            </button>
+                            </Link>
+                            <button className="btn btn-outline-primary rounded-circle p-2 lh-1" type="button">
+                                <img src='http://127.0.0.1:8000/media/imp/minus.png' alt='minus' className="bi" width="17" height="16"></img>
+                            </button>
+                        </div>
+                        <small className="text-body-secondary">Количество: {item.quantity}</small>
+                        <small className="text-body-secondary">{item.price} руб.</small>
                         </div>
                       </div>
                     </div>
