@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-class Home extends React.Component {
+class Cart extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
@@ -12,10 +12,11 @@ class Home extends React.Component {
     }
   
     componentDidMount() {
-      fetch("http://127.0.0.1:8000/")
+      fetch("http://127.0.0.1:8000/cart/", {credentials: 'include'})
         .then(res => res.json())
         .then(
           (result) => {
+            console.log(result)
             this.setState({
               isLoaded: true,
               items: result
@@ -39,10 +40,10 @@ class Home extends React.Component {
       } else {
         return (
             <div className="album py-3 bg-body-tertiary" style={{ width: 'calc(100vw - 200px)'}}>
-              <h1 className='text-center'>Все товары</h1>
+              <h1 className='text-center'>Корзина</h1>
             <div className="container">
               <div className="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-3">
-              {items.map((item) => (
+              {Object.keys(items).map((item) => (
                     <div className="col" key={item.id}>
                     <div className="card shadow-sm">
                       <img className="bd-placeholder-img card-img-top" width="100%" height="240" src={`http://127.0.0.1:8000${item.img}`} alt={item.name}></img>
@@ -50,7 +51,7 @@ class Home extends React.Component {
                         <Link to={`/product/${item.id}`} style={{ textDecoration: 'none'}}><p className="card-text">{item.name}</p></Link>
                         <div className="d-flex justify-content-between align-items-center">
                           <div className="btn-group">
-                            <Link to={`/cart_add/${item.id}`}><button type="button" className="btn btn-sm btn-outline-success">В корзину</button></Link>
+                            <button type="button" className="btn btn-sm btn-outline-secondary">В корзину</button>
                             <button type="button" className="btn btn-sm btn-outline-secondary">تعديل</button>
                           </div>
                           <small className="text-body-secondary">{item.price} руб.</small>
@@ -67,4 +68,4 @@ class Home extends React.Component {
     }
   }
 
-  export default Home;
+  export default Cart;

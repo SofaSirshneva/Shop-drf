@@ -2,6 +2,7 @@ from .models import Product, Category
 from .serializers import ProductSerializer, CategorySerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from .cart import Cart
 
 class MainPage(APIView):
     def get(self, request):
@@ -23,3 +24,27 @@ class OneCategory(APIView):
         catid = Category.objects.get(name=name)
         queryset = Product.objects.filter(categories=catid)
         return Response(ProductSerializer(queryset, many=True).data)
+    
+class CartAPI(APIView):
+    def get(self, request):
+        cart = Cart(request)
+        return Response(cart.cart)
+    
+class CartAdd(APIView):
+    def post(self, request):
+        cart = Cart(request)
+        cart.add(request.data['id'])
+        print(cart.cart)
+        return Response(cart.cart)
+    
+class CartRemove(APIView):
+    def post(self, request):
+        cart = Cart(request)
+        cart.remove(request.data['id'])
+        return Response(cart.cart)
+    
+class CartDelete(APIView):
+    def post(self, request):
+        cart = Cart(request)
+        cart.delete(request.data['id'])
+        return Response(cart.cart)

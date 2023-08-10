@@ -1,5 +1,4 @@
 import './App.css';
-import {Fragment} from "react";
 import Header from "./appHeader/Header";
 import Home from "./appHome/Home";
 import Slider from "./appSlider/Slider";
@@ -7,8 +6,12 @@ import { BrowserRouter as Router, Routes, Route}
     from 'react-router-dom';
 import Product from './appProduct/Product';
 import Category from './appCategory/Category';
+import Cart from './appCart/Cart';
+import CartAdd from './appCart/CartAdd';
+import reducers from './reducers';
 
 function App() {
+    const store = createStoreWithMiddleware(reducers);
     return (
         <Router>
         <div>
@@ -16,11 +19,11 @@ function App() {
             <div style={{ display: 'flex'}}>
                 <Slider/>
                 <Routes>
-                    <Route exact path='/' exact element={<Home />} />
+                    <Route exact path='/' element={<Home />} />
                     <Route path='/product/:id' element={<Product/>} />
                     <Route path='/:name' element={<Category/>} />
-                    {/* <Route path='/blogs' element={<Blogs/>} />
-                    <Route path='/sign-up' element={<SignUp/>} /> */}
+                    <Route path='/cart' element={<Cart/>} />
+                    <Route path='/cart_add/:id' element={<CartAdd/>} />
                 </Routes>
             </div>
         </div>

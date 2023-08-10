@@ -48,7 +48,7 @@ class Slider extends React.Component {
                             </Link>
                         </li>
                         {items.map((item) => (
-                            <li className="nav-item">
+                            <li className="nav-item" key={item.id}>
                             <Link to={`/${item.name}`} className="nav-link text-white" aria-current="page">
                                 {item.name}
                             </Link>

@@ -14,6 +14,9 @@ class Product(models.Model):
     carbohydrates = models.FloatField()
     img = models.ImageField(upload_to='imgs/', default='default.png')
 
+    def __str__(self) -> str:
+        return self.name
+
 
 class Category(models.Model):
     name=models.CharField(max_length=255, unique=True)
