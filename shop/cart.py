@@ -27,8 +27,8 @@ class Cart(object):
         product_id = str(product)
         if product_id in self.cart:
             self.cart[product_id]['quantity'] -= 1
-        if self.cart[product_id]['quantity'] == 0:
-            del self.cart[product_id]
+            if self.cart[product_id]['quantity'] == 0:
+                del self.cart[product_id]
         self.save()
 
     def delete(self, product):

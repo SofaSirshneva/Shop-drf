@@ -6,8 +6,14 @@ from .cart import Cart
 
 class MainPage(APIView):
     def get(self, request):
-        queryset = Product.objects.all()
-        return Response(ProductSerializer(queryset, many=True).data)
+        cart = Cart(request)
+        queryset = ProductSerializer(Product.objects.all(), many=True).data
+        for product in queryset:
+            if str(product['id']) in cart.cart:
+                product['quantity'] = cart.cart[str(product['id'])]['quantity']
+            else:
+                product['quantity'] = 0
+        return Response(queryset)
     
 class AllCategories(APIView):
     def get(self, request):
@@ -21,9 +27,15 @@ class OneProduct(APIView):
     
 class OneCategory(APIView):
     def get(self, request, name):
+        cart = Cart(request)
         catid = Category.objects.get(name=name)
-        queryset = Product.objects.filter(categories=catid)
-        return Response(ProductSerializer(queryset, many=True).data)
+        queryset = ProductSerializer(Product.objects.filter(categories=catid), many=True).data
+        for product in queryset:
+            if str(product['id']) in cart.cart:
+                product['quantity'] = cart.cart[str(product['id'])]['quantity']
+            else:
+                product['quantity'] = 0
+        return Response(queryset)
     
 class CartAPI(APIView):
     def get(self, request):
@@ -37,14 +49,18 @@ class CartAdd(APIView):
     def post(self, request):
         cart = Cart(request)
         cart.add(request.data['id'])
-        print(cart.cart)
-        return Response(cart.cart)
+        price = Product.objects.get(id=int(request.data['id'])).price
+        return Response(cart.cart[str(request.data['id'])] | {'price': price})
     
 class CartRemove(APIView):
     def post(self, request):
         cart = Cart(request)
+        price = Product.objects.get(id=int(request.data['id'])).price
         cart.remove(request.data['id'])
-        return Response(cart.cart)
+        if str(request.data['id']) in cart.cart:
+            return Response(cart.cart[str(request.data['id'])] | {'price': price})
+        else:
+            return Response({'quantity': 0} | {'price': price})
     
 class CartDelete(APIView):
     def post(self, request):
