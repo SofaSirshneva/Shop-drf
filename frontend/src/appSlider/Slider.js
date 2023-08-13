@@ -39,7 +39,7 @@ class Slider extends React.Component {
           } else {
             return (
             <div style={{ display: 'inline-flex' }}>
-                <div className="d-flex flex-column flex-shrink-0 p-3 text-bg-dark" style={{ width: '200px', height: 'calc(100vh -  30px)' }}>
+                <div className="d-flex flex-column flex-shrink-0 p-3 text-bg-dark" style={{ width: '200px', minHeight: 'calc(100vh -  30px)' }}>
                     <h2>Категории</h2>
                     <ul className="nav nav-pills flex-column mb-auto">
                         <li className="nav-item">

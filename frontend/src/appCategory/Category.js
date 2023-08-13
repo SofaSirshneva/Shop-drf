@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useParams } from "react-router-dom";
+import CartAdd from '../appCart/CartAdd';
+import CartRemove from '../appCart/CartRemove';
 
 function withParams(Component) {
     return props => <Component {...props} params={useParams()} />;
@@ -12,19 +14,21 @@ class Category extends React.Component {
       this.state = {
         error: null,
         isLoaded: false,
-        items: []
+        items: [],
+        name: 'default'
       };
     }
   
     componentDidMount() {
       const name = this.props.params.name;
-      fetch("http://127.0.0.1:8000/category/" + name)
+      fetch("http://127.0.0.1:8000/category/" + name, {credentials: 'include'})
         .then(res => res.json())
         .then(
           (result) => {
             this.setState({
               isLoaded: true,
-              items: result
+              items: result,
+              name: name
             });
           },
           (error) => {
@@ -35,6 +39,31 @@ class Category extends React.Component {
           }
         )
     }
+
+    componentDidUpdate(){
+      const name = this.props.params.name;
+      if (name !== this.state.name){
+        this.setState({
+          name: name,
+        });
+        fetch("http://127.0.0.1:8000/category/" + name, {credentials: 'include'})
+          .then(res => res.json())
+          .then(
+            (result) => {
+              this.setState({
+                isLoaded: true,
+                items: result
+              });
+            },
+            (error) => {
+              this.setState({
+                isLoaded: true,
+                error
+              });
+            }
+          )
+    }
+  }
   
     render() {
       const { error, isLoaded, items } = this.state;
@@ -55,10 +84,15 @@ class Category extends React.Component {
                       <div className="card-body">
                         <Link to={`/product/${item.id}`} style={{ textDecoration: 'none' }}><p className="card-text">{item.name}</p></Link>
                         <div className="d-flex justify-content-between align-items-center">
-                          <div className="btn-group">
-                            <button type="button" className="btn btn-sm btn-outline-secondary">В корзину</button>
-                            <button type="button" className="btn btn-sm btn-outline-secondary">تعديل</button>
-                          </div>
+                        <div className="d-flex gap-2 justify-content-center pt-3 pb-4">
+                            <button className="btn  btn-outline-primary rounded-circle p-2 lh-1" type="button" onClick={() => {CartAdd(item.id)}}>
+                                <img src='http://127.0.0.1:8000/media/imp/plus.png' alt='plus' className="bi" width="18" height="16"></img>
+                            </button>
+                            <button className="btn btn-outline-primary rounded-circle p-2 lh-1" type="button" onClick={() => {CartRemove(item.id)}}>
+                                <img src='http://127.0.0.1:8000/media/imp/minus.png' alt='minus' className="bi" width="17" height="16"></img>
+                            </button>
+                        </div>
+                          <small id={`quantity_${item.id}`} className="text-body-secondary">Количество: {item.quantity}</small>
                           <small className="text-body-secondary">{item.price} руб.</small>
                         </div>
                       </div>

@@ -1,5 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import CartAdd from '../appCart/CartAdd';
+import CartRemove from '../appCart/CartRemove';
 
 class Home extends React.Component {
     constructor(props) {
@@ -7,12 +9,13 @@ class Home extends React.Component {
       this.state = {
         error: null,
         isLoaded: false,
-        items: []
+        items: [],
+        cart_items: []
       };
     }
   
     componentDidMount() {
-      fetch("http://127.0.0.1:8000/")
+      fetch("http://127.0.0.1:8000/", {credentials: 'include'})
         .then(res => res.json())
         .then(
           (result) => {
@@ -29,7 +32,7 @@ class Home extends React.Component {
           }
         )
     }
-  
+
     render() {
       const { error, isLoaded, items } = this.state;
       if (error) {
@@ -49,10 +52,15 @@ class Home extends React.Component {
                       <div className="card-body">
                         <Link to={`/product/${item.id}`} style={{ textDecoration: 'none'}}><p className="card-text">{item.name}</p></Link>
                         <div className="d-flex justify-content-between align-items-center">
-                          <div className="btn-group">
-                            <Link to={`/cart_add/${item.id}`}><button type="button" className="btn btn-sm btn-outline-success">В корзину</button></Link>
-                            <button type="button" className="btn btn-sm btn-outline-secondary">تعديل</button>
-                          </div>
+                        <div className="d-flex gap-2 justify-content-center pt-3 pb-4">
+                            <button className="btn  btn-outline-primary rounded-circle p-2 lh-1" type="button" onClick={() => {CartAdd(item.id)}}>
+                                <img src='http://127.0.0.1:8000/media/imp/plus.png' alt='plus' className="bi" width="18" height="16"></img>
+                            </button>
+                            <button className="btn btn-outline-primary rounded-circle p-2 lh-1" type="button" onClick={() => {CartRemove(item.id)}}>
+                                <img src='http://127.0.0.1:8000/media/imp/minus.png' alt='minus' className="bi" width="17" height="16"></img>
+                            </button>
+                        </div>
+                          <small id={`quantity_${item.id}`} className="text-body-secondary">Количество: {item.quantity}</small>
                           <small className="text-body-secondary">{item.price} руб.</small>
                         </div>
                       </div>

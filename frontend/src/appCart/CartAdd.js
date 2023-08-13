@@ -1,10 +1,3 @@
-import React from 'react';
-import { useParams } from "react-router-dom";
-
-function withParams(Component) {
-    return props => <Component {...props} params={useParams()} />;
-}
-
 function getCookie(name) {
     if (!document.cookie) {
       return null;
@@ -19,10 +12,10 @@ function getCookie(name) {
     return decodeURIComponent(token[0].split('=')[1]);
   }
 
-class CartAdd extends React.Component {
-    
-      componentDidMount() {
-        fetch('http://127.0.0.1:8000/cart_add/', {
+function CartAdd(id) {
+    var fieldNameElement = document.getElementById('quantity_'+id);
+    var price = document.getElementById('price');
+    fetch('http://127.0.0.1:8000/cart_add/', {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
@@ -30,16 +23,15 @@ class CartAdd extends React.Component {
             'X-CSRFToken': getCookie('csrftoken')
         },
         body: JSON.stringify({
-            id: this.props.params.id
+            id: id
         }),
         credentials: 'include',})
         .then((response) => response.json())
-        .then((data) => console.log('This is your data', data));
-      }
+        .then((data) =>  {
+          fieldNameElement.innerHTML = 'Количество: ' + data['quantity'];
+          if(price)
+            price.innerHTML = Number(price.textContent) + Number(data['price']);
+        });
+    }
 
-    render(){return (<div>
-        OK
-    </div>)}
-}
-
-export default withParams(CartAdd);
+export default CartAdd;
