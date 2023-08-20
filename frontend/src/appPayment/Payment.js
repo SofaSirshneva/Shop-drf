@@ -2,6 +2,8 @@ import {CardElement, useElements, useStripe} from "@stripe/react-stripe-js";
 import React, {useState} from "react";
 import {Elements} from '@stripe/react-stripe-js';
 import {loadStripe} from "@stripe/stripe-js/pure";
+import { useParams } from 'react-router-dom';
+import CartClean from "../appCart/CartClean";
 const stripePromise = loadStripe('pk_test_51Nh72ZAfQm8BjnDHlGHek3iYhlQ9j15WBjZqsAm2QICSXczfcEJD8y8uDa4yikabBeYs7yawCkSLxdUMpo5wCbKX00MwKQNvIg');
 
 const Payment = (props) => (
@@ -29,6 +31,7 @@ const Comp = () => {
   const [email, setEmail] = useState('');
   const stripe = useStripe();
   const elements = useElements();
+  const params = useParams();
 
   const handleChange = (event) => {
   if (event.error) {
@@ -36,7 +39,6 @@ const Comp = () => {
   } else {
     setError(null);
   }
-  //console.log(props.location)
 }
 
 // Handle form submission.
@@ -57,27 +59,38 @@ const handleSubmit = async (event) => {
         'X-CSRFToken': getCookie('csrftoken')
     },
     body: JSON.stringify({
-        email, payment_method_id: paymentMethod.id
+        email, payment_method_id: paymentMethod.id,
+        price: params.price
     }),
-    credentials: 'include',})
+    credentials: 'include',
+  })
+  .then((response) => response.json())
+  .then((data) =>  {
+      alert('Оплата совершена!');
+      CartClean();
+      window.location.replace("http://127.0.0.1:3000/");
+  })
 };
 
 return (
-  <form onSubmit={handleSubmit} className="stripe-form">
+  <main className="form-signin m-auto">
+    <h5>К оплате {params.price} руб.</h5>
+  <form onSubmit={handleSubmit}>
     <div className="form-row">
-      <label htmlFor="email">Email Address</label>
-      <input className="form-input" id="email" name="name" type="email" placeholder="jenny.rosen@example.com" required 
-value={email} onChange={(event) => { setEmail(event.target.value)}} />
+      <label htmlFor="email">Адрес электронной почты:</label><br/>
+      <input className="form-control" style={{ width: '300px'}} id="email" name="name" type="email" placeholder="jenny.rosen@example.com" required
+        value={email} onChange={(event) => { setEmail(event.target.value); } } />
     </div>
+    <br/>
     <div className="form-row">
-      <label htmlFor="card-element">Credit or debit card</label> 
-      <CardElement id="card-element" onChange={handleChange}/>
+      <label htmlFor="card-element">Данные для оплаты:</label>
+      <CardElement id="card-element" onChange={handleChange} />
       <div className="card-errors" role="alert">{error}</div>
-    </div>
-    <button type="submit" className="submit-btn">
+    </div><br/>
+    <button type="submit" className="btn btn-info">
       Submit Payment
     </button>
-  </form> );
+  </form></main> );
 };
 
 export default Payment;

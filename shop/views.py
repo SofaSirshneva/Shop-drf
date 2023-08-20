@@ -4,7 +4,6 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from .cart import Cart
 import stripe
-import status
 
 class MainPage(APIView):
     def get(self, request):
@@ -70,6 +69,13 @@ class CartDelete(APIView):
         cart.delete(request.data['id'])
         return Response(cart.cart)
     
+class CartClean(APIView):
+    def get(self, request):
+        cart = Cart(request)
+        for el in list(cart.cart):
+            cart.delete(el)
+        return Response('Success')
+    
 stripe.api_key = 'sk_test_51Nh72ZAfQm8BjnDHN7vREfFZZJXaD9CBWD6MP1dUuxODrAaLBDltisg27zTDLmy8S0n3To5NJ02xKf09IYYCY2ZM00aj9V0biO'
 
 class Payment(APIView):
@@ -81,6 +87,14 @@ class Payment(APIView):
         # creating customer
         customer = stripe.Customer.create(
         email = email, payment_method=payment_method_id)
+        stripe.PaymentIntent.create(
+            customer=customer, 
+            payment_method=payment_method_id,  
+            currency='pln',
+            amount=data['price'],
+            confirm=True,
+            return_url='http://127.0.0.1:3000/'
+        )
         
         return Response(data = {
             'message': 'Success', 
