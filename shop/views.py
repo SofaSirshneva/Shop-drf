@@ -3,6 +3,8 @@ from .serializers import ProductSerializer, CategorySerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .cart import Cart
+import stripe
+import status
 
 class MainPage(APIView):
     def get(self, request):
@@ -67,3 +69,20 @@ class CartDelete(APIView):
         cart = Cart(request)
         cart.delete(request.data['id'])
         return Response(cart.cart)
+    
+stripe.api_key = 'sk_test_51Nh72ZAfQm8BjnDHN7vREfFZZJXaD9CBWD6MP1dUuxODrAaLBDltisg27zTDLmy8S0n3To5NJ02xKf09IYYCY2ZM00aj9V0biO'
+
+class Payment(APIView):
+    def post(self, request):
+        data = request.data
+        email = data['email']
+        payment_method_id = data['payment_method_id']
+        
+        # creating customer
+        customer = stripe.Customer.create(
+        email = email, payment_method=payment_method_id)
+        
+        return Response(data = {
+            'message': 'Success', 
+            'data': {'customer_id': customer.id}   
+        })

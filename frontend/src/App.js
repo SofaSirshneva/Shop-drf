@@ -8,6 +8,7 @@ import Product from './appProduct/Product';
 import Category from './appCategory/Category';
 import Cart from './appCart/Cart';
 import CartAdd from './appCart/CartAdd';
+import Payment from './appPayment/Payment';
 
 function App() {
     return (
@@ -22,6 +23,7 @@ function App() {
                     <Route path='/:name' element={<Category/>} />
                     <Route path='/cart' element={<Cart/>} />
                     <Route path='/cart_add/:id' element={<CartAdd/>} />
+                    <Route path='/payment' element={<Payment/>} />
                 </Routes>
             </div>
         </div>

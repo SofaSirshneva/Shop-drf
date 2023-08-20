@@ -75,7 +75,10 @@ class Cart extends React.Component {
                       <h3 className="navbar-brand">Итого к оплате: <small id='price'>{total_price}</small> руб.</h3>
                       </div>
                       <div className="d-flex">
-                        <button className="btn btn-outline-success">Перейти к оплате</button>
+                       <Link to={{
+                          pathname: '/payment',
+                          state: {'pay': {total_price}}
+                        }}><button className="btn btn-outline-success">Перейти к оплате</button></Link>
                       </div>
                     </nav>
                   </div>
