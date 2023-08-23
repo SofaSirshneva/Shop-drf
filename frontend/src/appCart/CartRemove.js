@@ -41,6 +41,8 @@ function CartRemove(item) {
             }
             else {
                 fieldNameElement.innerHTML = 'Количество: ' + data['quantity']
+            }
+            if (!card){
                 if (data['quantity'] < item.amount){
                     var elems = document.getElementsByName("add_"+item.id);
                     for(var i = 0; i < elems.length; i++) {
