@@ -12,7 +12,7 @@ function getCookie(name) {
     return decodeURIComponent(token[0].split('=')[1]);
   }
 
-function CartRemove(id) {
+function CartRemove(item) {
     fetch('http://127.0.0.1:8000/cart_remove/', {
         method: 'POST',
         headers: {
@@ -21,17 +21,17 @@ function CartRemove(id) {
             'X-CSRFToken': getCookie('csrftoken')
         },
         body: JSON.stringify({
-            id: id
+            id: item.id
         }),
         credentials: 'include',})
         .then((response) => response.json())
         .then((data) =>  {
-            var fieldNameElement = document.getElementById('quantity_'+id);
+            var fieldNameElement = document.getElementById('quantity_'+item.id);
             var price = document.getElementById('price');
             if(price)
-                price.innerHTML = Number(price.textContent) - Number(data['price']);
+                price.innerHTML = Number(price.textContent) - item.price;
             if (data['quantity'] === 0){
-                var card = document.getElementById(id);
+                var card = document.getElementById(item.id);
                 if (card){
                     card.innerHTML = '';
                 }
@@ -41,6 +41,12 @@ function CartRemove(id) {
             }
             else {
                 fieldNameElement.innerHTML = 'Количество: ' + data['quantity']
+                if (data['quantity'] < item.amount){
+                    var elems = document.getElementsByName("add_"+item.id);
+                    for(var i = 0; i < elems.length; i++) {
+                        elems[i].disabled = false;
+                    }
+                }
             }
         });
     }

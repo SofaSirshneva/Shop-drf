@@ -86,10 +86,14 @@ class Category extends React.Component {
                         <div className="d-flex justify-content-between align-items-center">
                         {item.amount ? (
                         <><div className="d-flex gap-2 justify-content-center pt-3 pb-4">
-                            <button className="btn  btn-outline-primary rounded-circle p-2 lh-1" type="button" onClick={() => { CartAdd(item.id); } }>
+                            {item.amount > item.quantity ?
+                            (<button className="btn  btn-outline-primary rounded-circle p-2 lh-1" type="button" name={`add_${item.id}`} onClick={() => {CartAdd(item)}}>
+                                <img src='http://127.0.0.1:8000/media/imp/plus.png' alt='plus' className="bi" width="18" height="16"></img>
+                            </button>) :
+                            (<button className="btn  btn-outline-primary rounded-circle p-2 lh-1" disabled={true} type="button" name={`add_${item.id}`} onClick={() => {CartAdd(item)}}>
                               <img src='http://127.0.0.1:8000/media/imp/plus.png' alt='plus' className="bi" width="18" height="16"></img>
-                            </button>
-                            <button className="btn btn-outline-primary rounded-circle p-2 lh-1" type="button" onClick={() => { CartRemove(item.id); } }>
+                              </button>)}
+                            <button className="btn btn-outline-primary rounded-circle p-2 lh-1" type="button" onClick={() => { CartRemove(item); } }>
                               <img src='http://127.0.0.1:8000/media/imp/minus.png' alt='minus' className="bi" width="17" height="16"></img>
                             </button>
                           </div><small id={`quantity_${item.id}`} className="text-body-secondary">Количество: {item.quantity}</small><small className="text-body-secondary">{item.price} руб.</small></> ) :
