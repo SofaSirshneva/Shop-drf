@@ -8,7 +8,7 @@ import stripe
 class MainPage(APIView):
     def get(self, request):
         cart = Cart(request)
-        queryset = ProductSerializer(Product.objects.all(), many=True).data
+        queryset = ProductSerializer(Product.objects.all().order_by('-amount'), many=True).data
         for product in queryset:
             if str(product['id']) in cart.cart:
                 product['quantity'] = cart.cart[str(product['id'])]['quantity']
@@ -30,7 +30,7 @@ class OneCategory(APIView):
     def get(self, request, name):
         cart = Cart(request)
         catid = Category.objects.get(name=name)
-        queryset = ProductSerializer(Product.objects.filter(categories=catid), many=True).data
+        queryset = ProductSerializer(Product.objects.filter(categories=catid).order_by('-amount'), many=True).data
         for product in queryset:
             if str(product['id']) in cart.cart:
                 product['quantity'] = cart.cart[str(product['id'])]['quantity']
@@ -70,9 +70,12 @@ class CartDelete(APIView):
         return Response(cart.cart)
     
 class CartClean(APIView):
-    def get(self, request):
+    def patch(self, request):
         cart = Cart(request)
-        for el in list(cart.cart):
+        for el, amount in list(cart.cart.items()):
+            prod = Product.objects.get(id=el)
+            prod.amount -= amount['quantity']
+            prod.save()
             cart.delete(el)
         return Response('Success')
     

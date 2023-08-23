@@ -14,7 +14,7 @@ function getCookie(name) {
 
 function CartClean(id) {
     fetch('http://127.0.0.1:8000/cart_clean/', {
-        method: 'GET',
+        method: 'PATCH',
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
