@@ -80,7 +80,7 @@ class Category extends React.Component {
                 {items.map((item) => (
                   <div className="col" key={item.id}>
                     <div className="card shadow-sm">
-                      <img className="bd-placeholder-img card-img-top" width="100%" height="240" src={`http://127.0.0.1:8000${item.img}`} alt={item.name}></img>
+                      <img className="bd-placeholder-img card-img-top" width="100%" height="240" src={`${process.env.REACT_APP_API_URL}${item.img}`} alt={item.name}></img>
                       <div className="card-body">
                         <Link to={`/product/${item.id}`} style={{ textDecoration: 'none' }}><p className="card-text">{item.name}</p></Link>
                         <div className="d-flex justify-content-between align-items-center">
@@ -88,13 +88,13 @@ class Category extends React.Component {
                         <><div className="d-flex gap-2 justify-content-center pt-3 pb-4">
                             {item.amount > item.quantity ?
                             (<button className="btn  btn-outline-primary rounded-circle p-2 lh-1" type="button" name={`add_${item.id}`} onClick={() => {CartAdd(item)}}>
-                                <img src='http://127.0.0.1:8000/media/imp/plus.png' alt='plus' className="bi" width="18" height="16"></img>
+                                <img src={`${process.env.REACT_APP_API_URL}/media/imp/plus.png`} alt='plus' className="bi" width="18" height="16"></img>
                             </button>) :
                             (<button className="btn  btn-outline-primary rounded-circle p-2 lh-1" disabled={true} type="button" name={`add_${item.id}`} onClick={() => {CartAdd(item)}}>
-                              <img src='http://127.0.0.1:8000/media/imp/plus.png' alt='plus' className="bi" width="18" height="16"></img>
+                              <img src={`${process.env.REACT_APP_API_URL}/media/imp/plus.png`} alt='plus' className="bi" width="18" height="16"></img>
                               </button>)}
                             <button className="btn btn-outline-primary rounded-circle p-2 lh-1" type="button" onClick={() => { CartRemove(item); } }>
-                              <img src='http://127.0.0.1:8000/media/imp/minus.png' alt='minus' className="bi" width="17" height="16"></img>
+                              <img src={`${process.env.REACT_APP_API_URL}/media/imp/minus.png`} alt='minus' className="bi" width="17" height="16"></img>
                             </button>
                           </div><small id={`quantity_${item.id}`} className="text-body-secondary">Количество: {item.quantity}</small><small className="text-body-secondary">{item.price} руб.</small></> ) :
                           <div className='text-center' style={{ color: 'red'}}>Нет в наличии</div>}

@@ -43,9 +43,19 @@ class Product extends React.Component {
         return <div>Loading...</div>;
       } else {
         return (
-            <div>
-            {item.name}
-            {item.price}
+            <div className='p-3'>
+              <div style={{ display: 'inline-flex' }}>
+                <img src={`${process.env.REACT_APP_API_URL}${item.img}`} className="img-thumbnail" style={{ height: '350px', width: '350px' }} />
+                <div className='p-3'>
+                  <h1>{item.name}</h1>
+                  <h5>Цена: {item.price}руб.</h5>
+                  Категории: {item.categories.map((c) => (
+                    <>{c.name}</>))}<br />
+                  В наличии: {item.amount} штуки <br />
+                  Состав: {item.compound}
+
+                </div>
+              </div>
            </div>
         );
       }
