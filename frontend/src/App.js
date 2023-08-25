@@ -9,6 +9,7 @@ import Category from './appCategory/Category';
 import Cart from './appCart/Cart';
 import CartAdd from './appCart/CartAdd';
 import Payment from './appPayment/Payment';
+import Search from './appHeader/Search';
 
 function App() {
     return (
@@ -24,6 +25,7 @@ function App() {
                     <Route path='/cart' element={<Cart/>} />
                     <Route path='/cart_add/:id' element={<CartAdd/>} />
                     <Route path='/payment/:price' element={<Payment/>} />
+                    <Route path='/search' element={<Search/>} />
                 </Routes>
             </div>
         </div>

@@ -15,7 +15,7 @@ function getCookie(name) {
 function CartAdd(item) {
     var fieldNameElement = document.getElementById('quantity_'+item.id);
     var price = document.getElementById('price');
-    fetch('http://127.0.0.1:8000/cart_add/', {
+    fetch(`${process.env.REACT_APP_API_URL}/cart_add/`, {
         method: 'POST',
         headers: {
             'Accept': 'application/json',

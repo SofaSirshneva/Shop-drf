@@ -13,7 +13,7 @@ function getCookie(name) {
   }
 
 function CartClean(id) {
-    fetch('http://127.0.0.1:8000/cart_clean/', {
+    fetch(`${process.env.REACT_APP_API_URL}/cart_clean/`, {
         method: 'PATCH',
         headers: {
             'Accept': 'application/json',

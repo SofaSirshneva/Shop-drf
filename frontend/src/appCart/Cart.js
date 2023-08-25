@@ -14,7 +14,7 @@ class Cart extends React.Component {
     }
   
     componentDidMount() {
-      fetch("http://127.0.0.1:8000/cart/", {credentials: 'include'})
+      fetch(`${process.env.REACT_APP_API_URL}/cart/`, {credentials: 'include'})
         .then(res => res.json())
         .then(
           (result) => {
@@ -53,7 +53,7 @@ class Cart extends React.Component {
                     <div className="card shadow-sm">
                       <img className="bd-placeholder-img card-img-top" width="100%" height="240" src={`${process.env.REACT_APP_API_URL}${item.img}`} alt={item.name}></img>
                       <div className="card-body">
-                        <Link to={`/product/${item.id}`} style={{ textDecoration: 'none'}}><p className="card-text">{item.name}</p></Link>
+                        <Link to={`/product/${item.id}`} style={{ textDecoration: 'none'}}><h5 className="card-title">{item.name}</h5></Link>
                         <div className="d-flex justify-content-between align-items-center">
                         <div className="d-flex gap-2 justify-content-center pt-3 pb-4">
                           {item.amount > item.quantity ?
@@ -67,7 +67,7 @@ class Cart extends React.Component {
                                 <img src={`${process.env.REACT_APP_API_URL}/media/imp/minus.png`} alt='minus' className="bi" width="17" height="16"></img>
                             </button>
                         </div>
-                        <small id={`quantity_${item.id}`} className="text-body-secondary">Количество: {item.quantity}</small>
+                        <small id={`quantity_${item.id}`} className="text-body-secondary p-3">Количество: {item.quantity}</small>
                         <small className="text-body-secondary">{item.price} руб.</small>
                         </div>
                       </div>

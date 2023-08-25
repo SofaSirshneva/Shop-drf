@@ -50,18 +50,16 @@ class CartAdd(APIView):
     def post(self, request):
         cart = Cart(request)
         cart.add(request.data['id'])
-        price = Product.objects.get(id=int(request.data['id'])).price
-        return Response(cart.cart[str(request.data['id'])] | {'price': price})
+        return Response(cart.cart[str(request.data['id'])])
     
 class CartRemove(APIView):
     def post(self, request):
         cart = Cart(request)
-        price = Product.objects.get(id=int(request.data['id'])).price
         cart.remove(request.data['id'])
         if str(request.data['id']) in cart.cart:
-            return Response(cart.cart[str(request.data['id'])] | {'price': price})
+            return Response(cart.cart[str(request.data['id'])])
         else:
-            return Response({'quantity': 0} | {'price': price})
+            return Response({'quantity': 0})
     
 class CartDelete(APIView):
     def post(self, request):
@@ -78,6 +76,17 @@ class CartClean(APIView):
             prod.save()
             cart.delete(el)
         return Response('Success')
+    
+class Search(APIView):
+    def get(self, request):
+        queryset = ProductSerializer(Product.objects.filter(name__icontains=request.GET["key"]), many=True).data
+        cart = Cart(request)
+        for product in queryset:
+            if str(product['id']) in cart.cart:
+                product['quantity'] = cart.cart[str(product['id'])]['quantity']
+            else:
+                product['quantity'] = 0
+        return Response(queryset)
     
 stripe.api_key = 'sk_test_51Nh72ZAfQm8BjnDHN7vREfFZZJXaD9CBWD6MP1dUuxODrAaLBDltisg27zTDLmy8S0n3To5NJ02xKf09IYYCY2ZM00aj9V0biO'
 

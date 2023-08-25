@@ -21,7 +21,7 @@ class Category extends React.Component {
   
     componentDidMount() {
       const name = this.props.params.name;
-      fetch("http://127.0.0.1:8000/category/" + name, {credentials: 'include'})
+      fetch(`${process.env.REACT_APP_API_URL}/category/`+ name, {credentials: 'include'})
         .then(res => res.json())
         .then(
           (result) => {
@@ -46,7 +46,7 @@ class Category extends React.Component {
         this.setState({
           name: name,
         });
-        fetch("http://127.0.0.1:8000/category/" + name, {credentials: 'include'})
+        fetch(`${process.env.REACT_APP_API_URL}/category/` + name, {credentials: 'include'})
           .then(res => res.json())
           .then(
             (result) => {
@@ -82,7 +82,7 @@ class Category extends React.Component {
                     <div className="card shadow-sm">
                       <img className="bd-placeholder-img card-img-top" width="100%" height="240" src={`${process.env.REACT_APP_API_URL}${item.img}`} alt={item.name}></img>
                       <div className="card-body">
-                        <Link to={`/product/${item.id}`} style={{ textDecoration: 'none' }}><p className="card-text">{item.name}</p></Link>
+                        <Link to={`/product/${item.id}`} style={{ textDecoration: 'none' }}><h5 className="card-title">{item.name}</h5></Link>
                         <div className="d-flex justify-content-between align-items-center">
                         {item.amount ? (
                         <><div className="d-flex gap-2 justify-content-center pt-3 pb-4">
@@ -96,7 +96,7 @@ class Category extends React.Component {
                             <button className="btn btn-outline-primary rounded-circle p-2 lh-1" type="button" onClick={() => { CartRemove(item); } }>
                               <img src={`${process.env.REACT_APP_API_URL}/media/imp/minus.png`} alt='minus' className="bi" width="17" height="16"></img>
                             </button>
-                          </div><small id={`quantity_${item.id}`} className="text-body-secondary">Количество: {item.quantity}</small><small className="text-body-secondary">{item.price} руб.</small></> ) :
+                          </div><small id={`quantity_${item.id}`} className="text-body-secondary p-3">Количество: {item.quantity}</small><small className="text-body-secondary">{item.price} руб.</small></> ) :
                           <div className='text-center' style={{ color: 'red'}}>Нет в наличии</div>}
                         </div>
                       </div>

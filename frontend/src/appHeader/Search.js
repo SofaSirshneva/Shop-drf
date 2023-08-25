@@ -3,18 +3,25 @@ import { Link } from 'react-router-dom';
 import CartAdd from '../appCart/CartAdd';
 import CartRemove from '../appCart/CartRemove';
 
-class Home extends React.Component {
+class Search extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
         error: null,
         isLoaded: false,
         items: [],
+        key: ''
       };
     }
   
     componentDidMount() {
-      fetch(`${process.env.REACT_APP_API_URL}/`, {credentials: 'include'})
+        const urlParams = new URLSearchParams(window.location.search);
+        const key = urlParams.get('key');
+        this.setState({
+            key: key,
+          });
+
+      fetch(`${process.env.REACT_APP_API_URL}/search/?key=${key}`, {credentials: 'include'})
         .then(res => res.json())
         .then(
           (result) => {
@@ -33,7 +40,7 @@ class Home extends React.Component {
     }
 
     render() {
-      const { error, isLoaded, items } = this.state;
+      const { error, isLoaded, items, key } = this.state;
       if (error) {
         return <div>Error: {error.message}</div>;
       } else if (!isLoaded) {
@@ -41,9 +48,11 @@ class Home extends React.Component {
       } else {
         return (
             <div className="album py-3 bg-body-tertiary" style={{ width: 'calc(100vw - 200px)'}}>
-              <h1 className='text-center'>Все товары</h1>
+            <h1 className='text-center'>Результаты поиска по запросу "{key}"</h1>
+            <hr style={{ width: '90%', marginLeft: '5%' }} />
             <div className="container">
-              <div className="row row-cols-2 row-cols-sm-2 row-cols-md-4 g-3">
+            {items.length ? (
+              <div className="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-3">
               {items.map((item) => (
                     <div className="col" key={item.id}>
                     <div className="card shadow-sm">
@@ -63,9 +72,7 @@ class Home extends React.Component {
                             <button className="btn btn-outline-primary rounded-circle p-2 lh-1" type="button" onClick={() => { CartRemove(item); } }>
                               <img src={`${process.env.REACT_APP_API_URL}/media/imp/minus.png`} alt='minus' className="bi" width="17" height="16"></img>
                             </button>
-                          </div>
-                          <small id={`quantity_${item.id}`} className="card-text p-3">Количество: {item.quantity}</small>
-                          <small className="card-text">{item.price} руб.</small></> ) :
+                          </div><small id={`quantity_${item.id}`} className="text-body-secondary p-3">Количество: {item.quantity}</small><small className="text-body-secondary">{item.price} руб.</small></> ) :
                           <div className='text-center' style={{ color: 'red'}}>Нет в наличии</div>}
                         </div>
                       </div>
@@ -73,6 +80,10 @@ class Home extends React.Component {
                   </div>
                 ))}
             </div>
+            ) :
+            (<><h3 className='text-center p-5'>Нет результатов по данному запросу</h3>
+            <img src={`${process.env.REACT_APP_API_URL}/media/imp/404.png`} alt='404' style={{ marginLeft: '10%'}}></img></>)
+            }
           </div>
         </div>
         );
@@ -80,4 +91,4 @@ class Home extends React.Component {
     }
   }
 
-  export default Home;
+  export default Search;

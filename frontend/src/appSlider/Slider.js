@@ -12,7 +12,7 @@ class Slider extends React.Component {
       }
     
       componentDidMount() {
-        fetch("http://127.0.0.1:8000/categories")
+        fetch(`${process.env.REACT_APP_API_URL}/categories`)
           .then(res => res.json())
           .then(
             (result) => {

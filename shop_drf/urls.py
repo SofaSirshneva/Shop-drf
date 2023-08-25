@@ -1,7 +1,8 @@
 from django.contrib import admin
 from django.urls import path
 from shop.views import MainPage, AllCategories, OneProduct, OneCategory, \
-                       CartAPI, CartAdd, CartRemove, CartDelete, Payment, CartClean
+                       CartAPI, CartAdd, CartRemove, CartDelete, Payment, \
+                       CartClean, Search
 from django.conf.urls.static import static
 from shop_drf import settings
 
@@ -17,6 +18,7 @@ urlpatterns = [
     path('cart_delete/', CartDelete().as_view()),
     path('cart_clean/', CartClean().as_view()),
     path('payment/', Payment().as_view()),
+    path('search/', Search().as_view()),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
