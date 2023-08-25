@@ -3,8 +3,8 @@
 ## Описание
 На сайте можно взаимодействовать с корзиной, совершать оплату выбранных товаров, присутствует возможность просмотра карточки товара и поиска.
 ![all](imgs/all.png)
-![cart](imgs/cart.jpg)
-![search](imgs/search.jpg)
+![cart](imgs/cart.png)
+![search](imgs/search.png)
 
 ## Стек технологий
 - backend: Django, DRF, SQLite
